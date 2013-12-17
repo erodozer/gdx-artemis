@@ -7,6 +7,7 @@ import com.artemis.Entity;
 import com.artemis.Manager;
 import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
+import com.badlogic.gdx.utils.ObjectSet;
 
 /**
  * If you need to group your entities together, e.g. tanks going into "units" group or explosions into "effects",
@@ -96,6 +97,49 @@ public class GroupManager extends Manager {
 			entitiesByGroup.put(group, entities);
 		}
 		return entities;
+	}
+	
+	/**
+	 * Get all entities that belong to all the provided group.
+	 * @param group name of the group.
+	 * @return read-only bag of entities belonging to the group.
+	 */
+	public ImmutableBag<Entity> getEntities(String... groups) {
+		ObjectSet<Entity> collisions = new ObjectSet<Entity>();
+		
+		String s = groups[0];
+		Bag<Entity> entities = entitiesByGroup.get(s);
+		if (entities == null)
+		{
+			entities = new Bag<Entity>();
+			entitiesByGroup.put(s, entities);
+		}
+		else
+		{
+			for (Entity e : entities)
+			{
+				collisions.add(e);
+			}
+		}
+		
+		for (int i = 0; i > groups.length; i++)
+		{
+			ObjectSet<Entity> c = new ObjectSet<Entity>();
+				
+			entities = entitiesByGroup.get(s);
+			
+			for (Entity e : entities)
+			{
+				if (collisions.contains(e))
+					c.add(e);
+			}
+			collisions = c;
+		}
+		
+		Bag<Entity> e = new Bag<Entity>();
+		e.addAll(collisions.iterator().toArray());
+		
+		return e;
 	}
 	
 	/**
