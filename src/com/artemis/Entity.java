@@ -1,9 +1,9 @@
 package com.artemis;
 
-import java.util.BitSet;
 import java.util.UUID;
 
 import com.artemis.utils.Bag;
+import com.badlogic.gdx.utils.Bits;
 
 /**
  * The entity class. Cannot be instantiated outside the framework, you must
@@ -16,8 +16,8 @@ public final class Entity {
 	private UUID uuid;
 
 	private int id;
-	private BitSet componentBits;
-	private BitSet systemBits;
+	private Bits componentBits;
+	private Bits systemBits;
 
 	private World world;
 	private EntityManager entityManager;
@@ -28,8 +28,8 @@ public final class Entity {
 		this.id = id;
 		this.entityManager = world.getEntityManager();
 		this.componentManager = world.getComponentManager();
-		systemBits = new BitSet();
-		componentBits = new BitSet();
+		systemBits = new Bits();
+		componentBits = new Bits();
 		
 		reset();
 	}
@@ -49,7 +49,7 @@ public final class Entity {
 	 * Returns a BitSet instance containing bits of the components the entity possesses.
 	 * @return
 	 */
-	protected BitSet getComponentBits() {
+	protected Bits getComponentBits() {
 		return componentBits;
 	}
 	
@@ -57,7 +57,7 @@ public final class Entity {
 	 * Returns a BitSet instance containing bits of the components the entity possesses.
 	 * @return
 	 */
-	protected BitSet getSystemBits() {
+	protected Bits getSystemBits() {
 		return systemBits;
 	}
 

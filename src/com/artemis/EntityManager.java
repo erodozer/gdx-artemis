@@ -1,12 +1,12 @@
 package com.artemis;
 
-import java.util.BitSet;
-
 import com.artemis.utils.Bag;
+import com.badlogic.gdx.utils.Bits;
+import com.badlogic.gdx.utils.IntArray;
 
 public class EntityManager extends Manager {
 	private Bag<Entity> entities;
-	private BitSet disabled;
+	private Bits disabled;
 	
 	private int active;
 	private long added;
@@ -17,7 +17,7 @@ public class EntityManager extends Manager {
 	
 	public EntityManager() {
 		entities = new Bag<Entity>();
-		disabled = new BitSet();
+		disabled = new Bits();
 		identifierPool = new IdentifierPool();
 	}
 	
@@ -132,16 +132,16 @@ public class EntityManager extends Manager {
 	 * Used only internally to generate distinct ids for entities and reuse them.
 	 */
 	private class IdentifierPool {
-		private Bag<Integer> ids;
+		private IntArray ids;
 		private int nextAvailableId;
 
 		public IdentifierPool() {
-			ids = new Bag<Integer>();
+			ids = new IntArray();
 		}
 		
 		public int checkOut() {
-			if(ids.size() > 0) {
-				return ids.removeLast();
+			if(ids.size > 0) {
+				return ids.removeIndex(ids.size-1);
 			}
 			return nextAvailableId++;
 		}

@@ -1,6 +1,6 @@
 package com.artemis;
 
-import java.util.BitSet;
+import com.badlogic.gdx.utils.Bits;
 
 /**
  * An Aspects is used by systems as a matcher against entities, to check if a system is
@@ -26,25 +26,25 @@ import java.util.BitSet;
  */
 public class Aspect {
 	
-	private BitSet allSet;
-	private BitSet exclusionSet;
-	private BitSet oneSet;
+	private Bits allSet;
+	private Bits exclusionSet;
+	private Bits oneSet;
 	
 	private Aspect() {
-		this.allSet = new BitSet();
-		this.exclusionSet = new BitSet();
-		this.oneSet = new BitSet();
+		this.allSet = new Bits();
+		this.exclusionSet = new Bits();
+		this.oneSet = new Bits();
 	}
 	
-	protected BitSet getAllSet() {
+	protected Bits getAllSet() {
 		return allSet;
 	}
 	
-	protected BitSet getExclusionSet() {
+	protected Bits getExclusionSet() {
 		return exclusionSet;
 	}
 	
-	protected BitSet getOneSet() {
+	protected Bits getOneSet() {
 		return oneSet;
 	}
 	

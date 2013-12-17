@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.artemis.annotations.Mapper;
-import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
+import com.artemis.utils.Bag;
 
 /**
  * The primary instance for the framework. It contains all the managers.
@@ -61,11 +61,11 @@ public class World {
 	 * Makes sure all managers systems are initialized in the order they were added.
 	 */
 	public void initialize() {
-		for (int i = 0; i < managersBag.size(); i++) {
+		for (int i = 0; i < managersBag.size; i++) {
 			managersBag.get(i).initialize();
 		}
 		
-		for (int i = 0; i < systemsBag.size(); i++) {
+		for (int i = 0; i < systemsBag.size; i++) {
 			ComponentMapperInitHelper.config(systemsBag.get(i), this);
 			systemsBag.get(i).initialize();
 		}

@@ -1,10 +1,10 @@
 package com.artemis;
 
-import java.util.BitSet;
 import java.util.HashMap;
 
 import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
+import com.badlogic.gdx.utils.Bits;
 
 /**
  * The most raw entity system. It should not typically be used, but you can create your own
@@ -23,9 +23,9 @@ public abstract class EntitySystem implements EntityObserver {
 
 	private Aspect aspect;
 
-	private BitSet allSet;
-	private BitSet exclusionSet;
-	private BitSet oneSet;
+	private Bits allSet;
+	private Bits exclusionSet;
+	private Bits oneSet;
 
 	private boolean passive;
 
@@ -108,7 +108,7 @@ public abstract class EntitySystem implements EntityObserver {
 		boolean contains = e.getSystemBits().get(systemIndex);
 		boolean interested = true; // possibly interested, let's try to prove it wrong.
 		
-		BitSet componentBits = e.getComponentBits();
+		Bits componentBits = e.getComponentBits();
 
 		// Check if the entity possesses ALL of the components defined in the aspect.
 		if(!allSet.isEmpty()) {

@@ -1,6 +1,7 @@
 package com.artemis;
 
 import com.artemis.utils.Bag;
+import com.badlogic.gdx.utils.ObjectSet;
 
 /**
  * High performance component retrieval from entities. Use this wherever you
@@ -41,7 +42,7 @@ public class ComponentMapper<A extends Component> {
 	 * @return the instance of the component
 	 */
 	public A getSafe(Entity e) {
-		if(components.isIndexWithinBounds(e.getId())) {
+		if (components.size >= e.getId()) {
 			return classType.cast(components.get(e.getId()));
 		}
 		return null;

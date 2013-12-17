@@ -1,6 +1,6 @@
 package com.artemis;
 
-import java.util.HashMap;
+import com.badlogic.gdx.utils.ObjectMap;
 
 public class ComponentType {
 	private static int INDEX = 0;
@@ -13,6 +13,10 @@ public class ComponentType {
 		this.type = type;
 	}
 
+	public Class<? extends Component> getClassType() {
+		return type;
+	}
+	
 	public int getIndex() {
 		return index;
 	}
@@ -22,7 +26,7 @@ public class ComponentType {
 		return "ComponentType["+type.getSimpleName()+"] ("+index+")";
 	}
 
-	private static HashMap<Class<? extends Component>, ComponentType> componentTypes = new HashMap<Class<? extends Component>, ComponentType>();
+	private static ObjectMap<Class<? extends Component>, ComponentType> componentTypes = new ObjectMap<Class<? extends Component>, ComponentType>();
 
 	public static ComponentType getTypeFor(Class<? extends Component> c) {
 		ComponentType type = componentTypes.get(c);

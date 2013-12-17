@@ -1,8 +1,7 @@
 package com.artemis;
 
-import java.util.BitSet;
-
 import com.artemis.utils.Bag;
+import com.badlogic.gdx.utils.Bits;
 
 public class ComponentManager extends Manager {
 	private Bag<Bag<Component>> componentsByType;
@@ -18,7 +17,7 @@ public class ComponentManager extends Manager {
 	}
 
 	private void removeComponentsOfEntity(Entity e) {
-		BitSet componentBits = e.getComponentBits();
+		Bits componentBits = e.getComponentBits();
 		for (int i = componentBits.nextSetBit(0); i >= 0; i = componentBits.nextSetBit(i+1)) {
 			componentsByType.get(i).set(e.getId(), null);
 		}
@@ -64,7 +63,7 @@ public class ComponentManager extends Manager {
 	}
 	
 	public Bag<Component> getComponentsFor(Entity e, Bag<Component> fillBag) {
-		BitSet componentBits = e.getComponentBits();
+		Bits componentBits = e.getComponentBits();
 
 		for (int i = componentBits.nextSetBit(0); i >= 0; i = componentBits.nextSetBit(i+1)) {
 			fillBag.add(componentsByType.get(i).get(e.getId()));
@@ -80,8 +79,8 @@ public class ComponentManager extends Manager {
 	}
 	
 	protected void clean() {
-		if(deleted.size() > 0) {
-			for(int i = 0; deleted.size() > i; i++) {
+		if(deleted.size > 0) {
+			for(int i = 0; deleted.size > i; i++) {
 				removeComponentsOfEntity(deleted.get(i));
 			}
 			deleted.clear();
