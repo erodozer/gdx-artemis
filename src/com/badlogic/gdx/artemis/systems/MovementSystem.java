@@ -22,12 +22,14 @@ public class MovementSystem extends EntityProcessingSystem {
 	@Mapper ComponentMapper<Velocity> velmap;
 	@Mapper ComponentMapper<Rotation> rotmap;
 	@Mapper ComponentMapper<Anchor> ancmap;
+	@Mapper ComponentMapper<Path> pathmap;
 	
 	@Override
 	protected void process(Entity e) {
 		Position p = posmap.get(e);
 		Velocity v = velmap.getSafe(e);
 		Anchor anchor = ancmap.getSafe(e);
+		Path path = pathmap.getSafe(e);
 		
 		Angle a = angmap.getSafe(e);
 		//rotate the angle
@@ -45,8 +47,8 @@ public class MovementSystem extends EntityProcessingSystem {
 		{
 			Position p1 = posmap.get(e);
 			Position p2 = posmap.getSafe(anchor.link);
-			//if the object is anchored to nother then it should be removed from the world
-			// ex. an enemy dies an its emitter still exists for a moment
+			//if the object is anchored to another then it should be removed from the world
+			// ex. the head of a multi-part actor dies, then its body should too
 			if (p2 != null)
 			{
 				p1.location.x = p2.location.x+p2.offset.x;
@@ -63,6 +65,12 @@ public class MovementSystem extends EntityProcessingSystem {
 		{
 			p.location.x += v.x * world.delta;
 			p.location.y += v.y * world.delta;
+		}
+		//entity follows a path
+		else if (path != null)
+		{
+			path.update(world.delta);
+			path.getValue(p.location);
 		}
 	}
 
