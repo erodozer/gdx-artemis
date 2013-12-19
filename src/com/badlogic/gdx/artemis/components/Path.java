@@ -25,6 +25,19 @@ public class Path extends Component {
 		this.duration = duration;
 	}
 	
+	/**
+	 * @param path - path for the entity to follow
+	 * @param duration - time it should take to traverse the path
+	 * @param delay - how long it should take before the entity will start traversing the path
+	 */
+	public Path(com.badlogic.gdx.math.Path<Vector2> path, float duration, float delay) {
+		this.path = path;
+		this.duration = duration;
+		this.timer = -delay;
+	}
+	
+	
+	
 	public void update(float t)
 	{
 		if (done)
@@ -51,6 +64,9 @@ public class Path extends Component {
 	
 	public void getValue(Vector2 out)
 	{
+		if (timer < 0)
+			path.valueAt(out, 0);
+		
 		if (!reverse)
 		{
 			path.valueAt(out, timer / duration);
