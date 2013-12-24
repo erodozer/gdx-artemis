@@ -16,7 +16,7 @@ public class ComponentMapper<A extends Component> {
 	private Class<A> classType;
 	private Bag<Component> components;
 
-	private ComponentMapper(Class<A> type, World world) {
+	public ComponentMapper(Class<A> type, World world) {
 		this.type = ComponentType.getTypeFor(type);
 		components = world.getComponentManager().getComponentsByType(this.type);
 		this.classType = type;
@@ -42,7 +42,7 @@ public class ComponentMapper<A extends Component> {
 	 * @return the instance of the component
 	 */
 	public A getSafe(Entity e) {
-		if (components.size >= e.getId()) {
+		if (components.size > e.getId()) {
 			return classType.cast(components.get(e.getId()));
 		}
 		return null;

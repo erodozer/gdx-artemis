@@ -21,10 +21,10 @@ abstract public class RenderSystem2D extends EntitySystem {
 		super(Aspect.getAspectForAll(Renderable.class));
 	}
 
-	@Mapper protected ComponentMapper<Position> pmap;
-	@Mapper protected ComponentMapper<Angle> amap;
-	@Mapper protected ComponentMapper<Size> smap;
-	@Mapper protected ComponentMapper<Renderable> rmap;
+	protected ComponentMapper<Position> pmap;
+	protected ComponentMapper<Angle> amap;
+	protected ComponentMapper<Size> smap;
+	protected ComponentMapper<Renderable> rmap;
 
 	//system has its own drawing components
 	protected Matrix4 camera;
@@ -32,6 +32,11 @@ abstract public class RenderSystem2D extends EntitySystem {
 	@Override
 	protected void initialize()
 	{
+		rmap = new ComponentMapper<Renderable>(Renderable.class, this.world);
+		amap = new ComponentMapper<Angle>(Angle.class, this.world);
+		smap = new ComponentMapper<Size>(Size.class, this.world);
+		pmap = new ComponentMapper<Position>(Position.class, this.world);
+		
 		camera = new Matrix4();
 		camera.setToOrtho2D(0, 0, getInternalRes()[0], getInternalRes()[1]);
 		camera.translate(getFOV()[0], getFOV()[1], 0);

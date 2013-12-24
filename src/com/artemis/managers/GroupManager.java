@@ -116,8 +116,9 @@ public class GroupManager extends Manager {
 		}
 		else
 		{
-			for (Entity e : entities)
+			for (int i = 0; i < entities.size; i++)
 			{
+				Entity e = entities.get(i);
 				collisions.add(e);
 			}
 		}
@@ -128,8 +129,9 @@ public class GroupManager extends Manager {
 				
 			entities = entitiesByGroup.get(s);
 			
-			for (Entity e : entities)
+			for (int n = 0; n < entities.size; n++)
 			{
+				Entity e = entities.get(n);
 				if (collisions.contains(e))
 					c.add(e);
 			}

@@ -11,11 +11,16 @@ import com.badlogic.gdx.artemis.components.*;
 
 abstract public class InputSystem extends EntityProcessingSystem implements InputProcessor {
     
-    @Mapper ComponentMapper<InputHandler> inputMap;
+    protected ComponentMapper<InputHandler> inputMap;
     
 	@SuppressWarnings("unchecked")
 	public InputSystem(Aspect a) {
 		super(a.all(InputHandler.class));
+	}
+	
+	@Override
+	public void initialize(){
+		inputMap = new ComponentMapper<InputHandler>(InputHandler.class, this.world);
 	}
 	
 	@Override
