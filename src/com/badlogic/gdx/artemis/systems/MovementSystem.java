@@ -60,18 +60,19 @@ public class MovementSystem extends EntityProcessingSystem {
 			}
 			return;
 		}
-		//entity has velocity
-		else if (v != null)
-		{
-			p.location.x += v.x * world.delta;
-			p.location.y += v.y * world.delta;
-		}
 		//entity follows a path
 		else if (path != null)
 		{
 			path.update(world.delta);
 			path.getValue(p.location);
 		}
+		//entity has velocity
+		else if (v != null)
+		{
+			p.location.x += v.x * world.delta;
+			p.location.y += v.y * world.delta;
+		}
+		
 	}
 
 }
