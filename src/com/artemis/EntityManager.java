@@ -132,16 +132,16 @@ public class EntityManager extends Manager {
 	 * Used only internally to generate distinct ids for entities and reuse them.
 	 */
 	private class IdentifierPool {
-		private IntArray ids;
+		private Bag<Integer> ids;
 		private int nextAvailableId;
 
 		public IdentifierPool() {
-			ids = new IntArray();
+			ids = new Bag<Integer>();
 		}
 		
 		public int checkOut() {
-			if(ids.size > 0) {
-				return ids.removeIndex(ids.size-1);
+			if(ids.size() > 0) {
+				return ids.removeLast();
 			}
 			return nextAvailableId++;
 		}

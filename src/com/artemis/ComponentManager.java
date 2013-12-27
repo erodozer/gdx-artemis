@@ -25,13 +25,14 @@ public class ComponentManager extends Manager {
 	}
 	
 	protected void addComponent(Entity e, ComponentType type, Component component) {
-		Bag<Component> components = componentsByType.get(type.getIndex());
+		componentsByType.ensureCapacity(type.getIndex());
 		
+		Bag<Component> components = componentsByType.get(type.getIndex());
 		if(components == null) {
 			components = new Bag<Component>();
-			components.ensureCapacity(e.getId() + 1);
 			componentsByType.set(type.getIndex(), components);
 		}
+		
 		components.set(e.getId(), component);
 
 		e.getComponentBits().set(type.getIndex());
