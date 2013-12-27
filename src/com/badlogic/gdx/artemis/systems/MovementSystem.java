@@ -32,6 +32,7 @@ public class MovementSystem extends EntityProcessingSystem {
 		Path path = pathmap.getSafe(e);
 		
 		Angle a = angmap.getSafe(e);
+		
 		//rotate the angle
 		if (a != null)
 		{
@@ -56,15 +57,21 @@ public class MovementSystem extends EntityProcessingSystem {
 			}
 			else
 			{
-				world.deleteEntity(e);
+				e.deleteFromWorld();
 			}
-			return;
 		}
 		//entity follows a path
 		else if (path != null)
 		{
-			path.update(world.delta);
-			path.getValue(p.location);
+			if (path.isDone())
+			{
+				e.deleteFromWorld();
+			}
+			else
+			{
+				path.update(world.delta);
+				path.getValue(p.location);
+			}
 		}
 		//entity has velocity
 		else if (v != null)
