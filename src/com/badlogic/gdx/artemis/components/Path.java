@@ -24,6 +24,7 @@ public class Path extends Component {
 	public Path(com.badlogic.gdx.math.Path<Vector2> path, float duration) {
 		this.path = path;
 		this.duration = duration;
+		this.loop = Loop.None;
 	}
 	
 	/**
@@ -31,11 +32,11 @@ public class Path extends Component {
 	 * @param duration - time it should take to traverse the path
 	 * @param delay - how long it should take before the entity will start traversing the path
 	 */
-	public Path(com.badlogic.gdx.math.Path<Vector2> path, float duration, float delay) {
+	public Path(com.badlogic.gdx.math.Path<Vector2> path, float duration, float delay, Loop l) {
 		this.path = path;
 		this.duration = duration;
 		this.timer = -delay;
-		this.loop = Loop.PingPong;
+		this.loop = l;
 	}
 	
 	
@@ -78,8 +79,10 @@ public class Path extends Component {
 	 */
 	public void getValue(Vector2 out)
 	{
-		if (timer < 0)
+		if (timer <= 0) {
 			path.valueAt(out, 0);
+			return;
+		}
 		
 		if (!reverse)
 		{
