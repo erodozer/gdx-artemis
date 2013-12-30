@@ -1,5 +1,6 @@
 package com.artemis.managers;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,6 +101,31 @@ public class GroupManager extends Manager {
 	}
 	
 	/**
+	 * Get all entities that only belong to the provided group
+	 * @param group
+	 * @return
+	 */
+	public ImmutableBag<Entity> getExclusiveEntities(String group) {
+		Bag<Entity> entities = entitiesByGroup.get(group);
+		if(entities == null) {
+			entities = new Bag<Entity>();
+			entitiesByGroup.put(group, entities);
+		}
+	
+		for (int i = 0; i < entities.size;)
+		{
+			Entity e = entities.get(i);
+			if (this.getGroups(e).size() > 1)
+				entities.remove(e);
+			else
+				i++;
+		}
+		
+		return entities;
+		
+	}
+	
+	/**
 	 * Get all entities that belong to all the provided group.
 	 * @param group name of the group.
 	 * @return read-only bag of entities belonging to the group.
@@ -123,11 +149,16 @@ public class GroupManager extends Manager {
 			}
 		}
 		
-		for (int i = 0; i > groups.length; i++)
+		for (int i = 1; i < groups.length; i++)
 		{
 			ObjectSet<Entity> c = new ObjectSet<Entity>();
-				
+			s = groups[i];
 			entities = entitiesByGroup.get(s);
+			if (entities == null)
+			{
+				entities = new Bag<Entity>();
+				entitiesByGroup.put(s, entities);
+			}
 			
 			for (int n = 0; n < entities.size; n++)
 			{
@@ -135,6 +166,7 @@ public class GroupManager extends Manager {
 				if (collisions.contains(e))
 					c.add(e);
 			}
+			
 			collisions = c;
 		}
 		
