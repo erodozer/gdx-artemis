@@ -199,7 +199,7 @@ public class GroupManager extends Manager {
 	 * @param e the entity to check for.
 	 * @return true if the entity is in the supplied group, false if not.
 	 */
-	public boolean inInGroup(Entity e, String group) {
+	public boolean isInGroup(Entity e, String group) {
 		Bag<String> groups = groupsByEntity.get(e);
 		return groups.contains(group);
 	}
