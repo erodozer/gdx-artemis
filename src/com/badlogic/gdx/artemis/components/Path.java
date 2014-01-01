@@ -17,6 +17,11 @@ public class Path extends Component {
 	private boolean done;
 	private boolean waiting;
 	
+	private Vector2 start = new Vector2();
+	
+	//temporary vector for holding calculations
+	private Vector2 tmp = new Vector2();
+	
 	/**
 	 * @param path - path for the entity to follow
 	 * @param duration - time it should take to traverse the path
@@ -79,19 +84,23 @@ public class Path extends Component {
 	 */
 	public void getValue(Vector2 out)
 	{
+		out.set(start);
 		if (timer <= 0) {
-			path.valueAt(out, 0);
-			return;
-		}
-		
-		if (!reverse)
-		{
-			path.valueAt(out, timer / duration);
+			path.valueAt(tmp, 0);
 		}
 		else
 		{
-			path.valueAt(out, (duration - timer) / duration);
+			if (!reverse)
+			{
+				path.valueAt(tmp, timer / duration);
+			}
+			else
+			{
+				path.valueAt(tmp, (duration - timer) / duration);
+			}
 		}
+		
+		out.add(tmp);
 	}
 	
 	public static enum Loop {
