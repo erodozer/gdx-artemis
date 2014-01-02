@@ -2,6 +2,7 @@ package com.badlogic.gdx.artemis.components;
 
 import com.artemis.Component;
 import com.artemis.ComponentType;
+import com.badlogic.gdx.math.MathUtils;
 
 /**
  * Allows an entity to move in a direction at a constant rate
@@ -55,8 +56,8 @@ public class Velocity extends Component {
 	 */
 	public void setTo(int angle, float speed)
 	{
-		this.x = (float)Math.sin(angle)*speed;
-		this.y = (float)Math.cos(angle)*speed;	
+		this.x = (float)MathUtils.cosDeg(angle)*speed;
+		this.y = (float)MathUtils.sinDeg(angle)*speed;	
 	}
 	
 	/**
