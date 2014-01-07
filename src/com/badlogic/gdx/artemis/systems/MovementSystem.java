@@ -13,13 +13,13 @@ public class MovementSystem extends EntityProcessingSystem {
 		/**
 		 * Select out all entities with positions
 		 */
-		super(Aspect.getAspectForAll(Position.class).one(Velocity.class, Anchor.class, Angle.class, Rotation.class));
+		super(Aspect.getAspectForAll(Position.class).one(Movement.class, Anchor.class, Angle.class, Rotation.class));
 	}
 
 	@Mapper ComponentMapper<Position> posmap;
 	@Mapper ComponentMapper<Angle> angmap;
 	@Mapper ComponentMapper<Time> timemap;
-	@Mapper ComponentMapper<Velocity> velmap;
+	@Mapper ComponentMapper<Movement> velmap;
 	@Mapper ComponentMapper<Rotation> rotmap;
 	@Mapper ComponentMapper<Anchor> ancmap;
 	@Mapper ComponentMapper<Path> pathmap;
@@ -27,7 +27,7 @@ public class MovementSystem extends EntityProcessingSystem {
 	@Override
 	protected void process(Entity e) {
 		Position p = posmap.get(e);
-		Velocity v = velmap.getSafe(e);
+		Movement v = velmap.getSafe(e);
 		Anchor anchor = ancmap.getSafe(e);
 		Path path = pathmap.getSafe(e);
 		
@@ -76,8 +76,9 @@ public class MovementSystem extends EntityProcessingSystem {
 		//entity has velocity
 		else if (v != null)
 		{
-			p.location.x += v.x * world.delta;
-			p.location.y += v.y * world.delta;
+			v.update(world.delta);
+			p.location.x += v.velocity.x * world.delta;
+			p.location.y += v.velocity.y * world.delta;
 		}
 		
 	}
