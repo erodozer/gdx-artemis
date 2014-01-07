@@ -2,12 +2,11 @@ package com.artemis;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
 import com.artemis.utils.Bag;
+import com.badlogic.gdx.utils.ObjectMap;
 
 /**
  * The primary instance for the framework. It contains all the managers.
@@ -30,17 +29,17 @@ public class World {
 	private Bag<Entity> enable;
 	private Bag<Entity> disable;
 
-	private Map<Class<? extends Manager>, Manager> managers;
+	private ObjectMap<Class<? extends Manager>, Manager> managers;
 	private Bag<Manager> managersBag;
 	
-	private Map<Class<?>, EntitySystem> systems;
+	private ObjectMap<Class<?>, EntitySystem> systems;
 	private Bag<EntitySystem> systemsBag;
 
 	public World() {
-		managers = new HashMap<Class<? extends Manager>, Manager>();
+		managers = new ObjectMap<Class<? extends Manager>, Manager>();
 		managersBag = new Bag<Manager>();
 		
-		systems = new HashMap<Class<?>, EntitySystem>();
+		systems = new ObjectMap<Class<?>, EntitySystem>();
 		systemsBag = new Bag<EntitySystem>();
 
 		added = new Bag<Entity>();
@@ -124,7 +123,7 @@ public class World {
 	 * @param manager to delete.
 	 */
 	public void deleteManager(Manager manager) {
-		managers.remove(manager);
+		managers.remove(manager.getClass());
 		managersBag.remove(manager);
 	}
 

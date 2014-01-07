@@ -1,7 +1,5 @@
 package com.artemis.managers;
 
-import java.util.Arrays;
-
 import com.artemis.Entity;
 import com.artemis.Manager;
 import com.artemis.utils.Bag;

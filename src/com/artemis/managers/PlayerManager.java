@@ -1,12 +1,10 @@
 package com.artemis.managers;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.artemis.Entity;
 import com.artemis.Manager;
 import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
+import com.badlogic.gdx.utils.ObjectMap;
 
 
 /**
@@ -18,12 +16,12 @@ import com.artemis.utils.ImmutableBag;
  *
  */
 public class PlayerManager extends Manager {
-	private Map<Entity, String> playerByEntity;
-	private Map<String, Bag<Entity>> entitiesByPlayer;
+	private ObjectMap<Entity, String> playerByEntity;
+	private ObjectMap<String, Bag<Entity>> entitiesByPlayer;
 
 	public PlayerManager() {
-		playerByEntity = new HashMap<Entity, String>();
-		entitiesByPlayer = new HashMap<String, Bag<Entity>>();
+		playerByEntity = new ObjectMap<Entity, String>();
+		entitiesByPlayer = new ObjectMap<String, Bag<Entity>>();
 	}
 	
 	public void setPlayer(Entity e, String player) {

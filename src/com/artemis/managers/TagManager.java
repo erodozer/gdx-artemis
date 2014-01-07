@@ -1,11 +1,9 @@
 package com.artemis.managers;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.artemis.Entity;
 import com.artemis.Manager;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectMap.Values;
 
 
 /**
@@ -16,12 +14,12 @@ import com.artemis.Manager;
  *
  */
 public class TagManager extends Manager {
-	private Map<String, Entity> entitiesByTag;
-	private Map<Entity, String> tagsByEntity;
+	private ObjectMap<String, Entity> entitiesByTag;
+	private ObjectMap<Entity, String> tagsByEntity;
 
 	public TagManager() {
-		entitiesByTag = new HashMap<String, Entity>();
-		tagsByEntity = new HashMap<Entity, String>();
+		entitiesByTag = new ObjectMap<String, Entity>();
+		tagsByEntity = new ObjectMap<Entity, String>();
 	}
 
 	public void register(String tag, Entity e) {
@@ -41,7 +39,7 @@ public class TagManager extends Manager {
 		return entitiesByTag.get(tag);
 	}
 	
-	public Collection<String> getRegisteredTags() {
+	public Values<String> getRegisteredTags() {
 		return tagsByEntity.values();
 	}
 	

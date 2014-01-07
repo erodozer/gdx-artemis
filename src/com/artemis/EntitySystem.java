@@ -1,10 +1,9 @@
 package com.artemis;
 
-import java.util.HashMap;
-
 import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.utils.Bits;
+import com.badlogic.gdx.utils.ObjectMap;
 
 /**
  * The most raw entity system. It should not typically be used, but you can create your own
@@ -204,7 +203,7 @@ public abstract class EntitySystem implements EntityObserver {
 	 */
 	private static class SystemIndexManager {
 		private static int INDEX = 0;
-		private static HashMap<Class<? extends EntitySystem>, Integer> indices = new HashMap<Class<? extends EntitySystem>, Integer>();
+		private static ObjectMap<Class<? extends EntitySystem>, Integer> indices = new ObjectMap<Class<? extends EntitySystem>, Integer>();
 		
 		private static int getIndexFor(Class<? extends EntitySystem> es){
 			Integer index = indices.get(es);
