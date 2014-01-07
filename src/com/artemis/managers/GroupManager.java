@@ -1,13 +1,12 @@
 package com.artemis.managers;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.artemis.Entity;
 import com.artemis.Manager;
 import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 
 /**
@@ -20,12 +19,12 @@ import com.badlogic.gdx.utils.ObjectSet;
  *
  */
 public class GroupManager extends Manager {
-	private Map<String, Bag<Entity>> entitiesByGroup;
-	private Map<Entity, Bag<String>> groupsByEntity;
+	private ObjectMap<String, Bag<Entity>> entitiesByGroup;
+	private ObjectMap<Entity, Bag<String>> groupsByEntity;
 
 	public GroupManager() {
-		entitiesByGroup = new HashMap<String, Bag<Entity>>();
-		groupsByEntity = new HashMap<Entity, Bag<String>>();
+		entitiesByGroup = new ObjectMap<String, Bag<Entity>>();
+		groupsByEntity = new ObjectMap<Entity, Bag<String>>();
 	}
 	
 
@@ -41,17 +40,27 @@ public class GroupManager extends Manager {
 	 * @param e entity to add into the group.
 	 */
 	public void add(Entity e, String group) {
-		Bag<Entity> entities = entitiesByGroup.get(group);
-		if(entities == null) {
+		Bag<Entity> entities;
+		if (!entitiesByGroup.containsKey(group))
+		{
 			entities = new Bag<Entity>();
 			entitiesByGroup.put(group, entities);
 		}
+		else
+		{
+			entities = entitiesByGroup.get(group);
+		}
 		entities.add(e);
 		
-		Bag<String> groups = groupsByEntity.get(e);
-		if(groups == null) {
+		Bag<String> groups;
+		if (!groupsByEntity.containsKey(e))
+		{
 			groups = new Bag<String>();
-			groupsByEntity.put(e, groups);
+			groupsByEntity.put(e, groups);	
+		}
+		else
+		{
+			groups = groupsByEntity.get(e);
 		}
 		groups.add(group);
 	}
@@ -62,27 +71,27 @@ public class GroupManager extends Manager {
 	 * @param group
 	 */
 	public void remove(Entity e, String group) {
-		Bag<Entity> entities = entitiesByGroup.get(group);
-		if(entities != null) {
+		if (entitiesByGroup.containsKey(group)){
+			Bag<Entity> entities = entitiesByGroup.get(group);
 			entities.remove(e);
 		}
 		
-		Bag<String> groups = groupsByEntity.get(e);
-		if(groups != null) {
-			groups.remove(group);
+		if (groupsByEntity.containsKey(e)){
+			Bag<String> groups = groupsByEntity.get(e);
+			groups.remove(group);			
 		}
 	}
 	
 	public void removeFromAllGroups(Entity e) {
-		Bag<String> groups = groupsByEntity.get(e);
-		if(groups != null) {
+		if (groupsByEntity.containsKey(e)){
+			Bag<String> groups = groupsByEntity.get(e);
 			for(int i = 0; groups.size() > i; i++) {
 				Bag<Entity> entities = entitiesByGroup.get(groups.get(i));
 				if(entities != null) {
 					entities.remove(e);
 				}
 			}
-			groups.clear();
+			groupsByEntity.remove(e);
 		}
 	}
 	
@@ -92,12 +101,10 @@ public class GroupManager extends Manager {
 	 * @return read-only bag of entities belonging to the group.
 	 */
 	public ImmutableBag<Entity> getEntities(String group) {
-		Bag<Entity> entities = entitiesByGroup.get(group);
-		if(entities == null) {
-			entities = new Bag<Entity>();
-			entitiesByGroup.put(group, entities);
+		if (!entitiesByGroup.containsKey(group)){
+			entitiesByGroup.put(group, new Bag<Entity>());
 		}
-		return entities;
+		return entitiesByGroup.get(group);
 	}
 	
 	/**
@@ -106,22 +113,19 @@ public class GroupManager extends Manager {
 	 * @return
 	 */
 	public ImmutableBag<Entity> getExclusiveEntities(String group) {
-		Bag<Entity> entities = entitiesByGroup.get(group);
-		if(entities == null) {
-			entities = new Bag<Entity>();
-			entitiesByGroup.put(group, entities);
-		}
+		ImmutableBag<Entity> entities = getEntities(group);
 	
-		for (int i = 0; i < entities.size;)
+		Bag<Entity> bag = new Bag<Entity>();
+		//check for collisions
+		for (int i = 0; i < entities.size(); i++)
 		{
 			Entity e = entities.get(i);
-			if (this.getGroups(e).size() > 1)
-				entities.remove(e);
-			else
-				i++;
+			if (getGroups(e).size() == 1){
+				bag.add(e);
+			}
 		}
 		
-		return entities;
+		return bag;
 		
 	}
 	
@@ -133,34 +137,26 @@ public class GroupManager extends Manager {
 	public ImmutableBag<Entity> getEntities(String... groups) {
 		ObjectSet<Entity> collisions = new ObjectSet<Entity>();
 		
-		String s = groups[0];
-		Bag<Entity> entities = entitiesByGroup.get(s);
-		if (entities == null)
+		//get initial set
 		{
-			entities = new Bag<Entity>();
-			entitiesByGroup.put(s, entities);
-		}
-		else
-		{
-			for (int i = 0; i < entities.size; i++)
+			String s = groups[0];
+			ImmutableBag<Entity> entities = getEntities(s);
+			
+			for (int i = 0; i < entities.size(); i++)
 			{
 				Entity e = entities.get(i);
 				collisions.add(e);
 			}
 		}
 		
+		
 		for (int i = 1; i < groups.length; i++)
 		{
 			ObjectSet<Entity> c = new ObjectSet<Entity>();
-			s = groups[i];
-			entities = entitiesByGroup.get(s);
-			if (entities == null)
-			{
-				entities = new Bag<Entity>();
-				entitiesByGroup.put(s, entities);
-			}
+			String s = groups[i];
+			ImmutableBag<Entity> entities = getEntities(s);
 			
-			for (int n = 0; n < entities.size; n++)
+			for (int n = 0; n < entities.size(); n++)
 			{
 				Entity e = entities.get(n);
 				if (collisions.contains(e))
